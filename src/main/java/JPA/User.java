@@ -11,8 +11,8 @@ import javax.persistence.Table;
 @Table(name="User")
 public class User implements Serializable{
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	//The IDENTITY strategy means that the JPA provider uses the database identity column to generate the primary key.
 	private int id;
 	//USE ENUM LATER (ADMIN, USER)
 	private String role;
