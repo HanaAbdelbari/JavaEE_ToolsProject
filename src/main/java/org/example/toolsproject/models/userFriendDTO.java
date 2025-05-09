@@ -1,14 +1,15 @@
 package org.example.toolsproject.models;
 
-public class userFriendDTO {
-    public int id;
-    public String name;
-    public String email;
+import org.example.toolsproject.models.User;
 
-    public userFriendDTO(User user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
+public class userFriendDTO {
+    public int friendId;
+    public String friendName;
+    public String friendEmail;
+
+    public userFriendDTO(User account) {
+        this.friendId = account.getUserId();
+        this.friendName = account.getFullName();
+        this.friendEmail = account.getEmailAddress();
     }
 }
-

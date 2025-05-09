@@ -27,7 +27,7 @@ public class CommentLikeService {
         em.flush();
 
         // Notify the post owner
-        int postOwnerId = Thepost.getUser().getId();
+        int postOwnerId = Thepost.getUser().getUserId();
         if (postOwnerId != userId) { // Don't notify if the user is commenting on their own post
             Notifier(postOwnerId, userId, "commented on", postId);
         }
@@ -73,7 +73,7 @@ public class CommentLikeService {
         em.flush();
 
         // Notify the post owner
-        int postOwnerId = post.getUser().getId();
+        int postOwnerId = post.getUser().getUserId();
         if (postOwnerId != userId) { // Don't notify if the user is liking their own post
             Notifier(postOwnerId, userId, " done a liked", postId);
         }

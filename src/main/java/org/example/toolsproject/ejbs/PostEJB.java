@@ -58,7 +58,7 @@ public class PostEJB {
         post.setLikecount(LikeCount);
         em.merge(post);
 
-        return new PostDTO(post.getId(), post.getUser().getId(), post.getContent(), post.getImageUrl(), post.getLinkUrl(),
+        return new PostDTO(post.getId(), post.getUser().getUserId(), post.getContent(), post.getImageUrl(), post.getLinkUrl(),
                 post.getComments() != null ? post.getComments().size() : 0,
                 post.getLikes() != null ? post.getLikes().size() : 0,post.getcreatedTime());
     }
@@ -75,7 +75,7 @@ public class PostEJB {
     // Delete Post
     public void deletePost(int postId, int userId) {
         Post post = em.find(Post.class, postId);
-        if (post == null || post.getUser().getId()!=userId) {
+        if (post == null || post.getUser().getUserId()!=userId) {
             throw new IllegalArgumentException("Invalid post or unauthorized");
         }
         em.remove(post);
@@ -95,7 +95,7 @@ public class PostEJB {
 
         Like like = new Like();
         like.setPost(post);
-        like.setLikerid(user.getId());
+        like.setLikerid(user.getUserId());
 
         em.persist(like);
         return like;
@@ -110,7 +110,7 @@ public class PostEJB {
 
         Comment commentt = new Comment();
         commentt.setcreatedPost(post);
-        commentt.setCommenterid(user.getId());
+        commentt.setCommenterid(user.getUserId());
         commentt.setContent(content);
 
         em.persist(commentt);

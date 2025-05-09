@@ -4,128 +4,71 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.example.toolsproject.models.Post.Post;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
-@Table(name="Users")
+@DiscriminatorColumn(name = "account_type", discriminatorType = DiscriminatorType.STRING)
+@Table(name = "Users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int userId;
 
     @NotNull
-    private String name;
+    private String fullName;
 
     @NotNull
-    @Column(unique=true)
-    private String email;
+    @Column(unique = true)
+    private String emailAddress;
 
     @NotNull
-    @Column(unique=true)
-    private String password;
+    @Column(unique = true)
+    private String userPassword;
 
     @NotNull
-    private String bio;
+    private String profileBio;
 
-    @Column(name = "user_type", insertable = false, updatable = false)
-    private String userType;
+    @Column(name = "account_type", insertable = false, updatable = false)
+    private String accountType;
 
     @OneToMany(mappedBy = "sender")
-    private List<friendRequest> sentRequests;
+    private List<friendRequest> outgoingRequests;
 
     @OneToMany(mappedBy = "receiver")
-    private List<friendRequest> receivedRequests;
+    private List<friendRequest> incomingRequests;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_friends",
+            name = "user_connections",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id")
+            inverseJoinColumns = @JoinColumn(name = "connection_id")
     )
-    private List<User> friends = new ArrayList<>();
+    private List<User> connections = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Post> posts;
+    private List<Post> userPosts;
 
-    public User(String name, String email, String password, String bio) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.bio = bio;
+    public User(String fullName, String emailAddress, String userPassword, String profileBio) {
+        this.fullName = fullName;
+        this.emailAddress = emailAddress;
+        this.userPassword = userPassword;
+        this.profileBio = profileBio;
     }
 
-    public User() {
+    public User() {}
 
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-
-
-    public String getEmail() {
-        return email;
-    }
-
-
-
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-
-
-    public String getPassword() {
-        return password;
-    }
-
-
-
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-
-
-    public String getBio() {
-        return bio;
-    }
-
-
-
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    };
-
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public List<User> getFriends() {
-        return friends;
-    }
+    public int getUserId() { return userId; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getEmailAddress() { return emailAddress; }
+    public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
+    public String getUserPassword() { return userPassword; }
+    public void setUserPassword(String userPassword) { this.userPassword = userPassword; }
+    public String getProfileBio() { return profileBio; }
+    public void setProfileBio(String profileBio) { this.profileBio = profileBio; }
+    public String getAccountType() { return accountType; }
+    public List<User> getConnections() { return connections; }
 }
