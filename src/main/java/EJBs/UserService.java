@@ -10,12 +10,13 @@ import javax.persistence.Query;
 
 import JPA.User;
 
-@Stateless
+
 @NamedQueries({
 	@NamedQuery(name="getUser",
 		query="select u from User u where u.email = :email and u.password = :password")
 	
 })
+@Stateless
 public class UserService {
 	@Inject
 	private EntityManager entityManager;
@@ -30,7 +31,19 @@ public class UserService {
         }
 	}
 	
-	public User getCustomerByEmailAndPassword(String userEmail, String userPassword) 
+	public User getUserById(int id)
+	{
+		try {
+			
+		    return entityManager.find(User.class, id);
+		
+    } catch (PersistenceException exception) {
+        System.out.println("get user failed: " + exception.getMessage());
+    }
+	return null;
+	}
+	
+	public User getUserByEmailAndPassword(String userEmail, String userPassword) 
 	{
 		
 		try {
