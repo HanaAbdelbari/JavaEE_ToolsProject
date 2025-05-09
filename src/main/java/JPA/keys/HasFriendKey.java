@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class HasFriendKey implements Serializable{
-	//user and hasFriend relation 
+	
 	private int userId1;
 	private int userId2;
 	
@@ -34,5 +34,14 @@ public class HasFriendKey implements Serializable{
 	{
 		return this.userId2;
 	}
+	@Override
+    public boolean equals(Object o) {
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 
 }

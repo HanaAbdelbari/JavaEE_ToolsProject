@@ -2,6 +2,8 @@ package JPA;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import JPA.keys.HasFriendKey;
@@ -15,6 +17,14 @@ public class HasFriend {
 	private HasFriendKey id;
 	
 	private boolean isAccepted; // true: friend request is accepted, false friend request is pending
+	
+	@ManyToOne
+	@JoinColumn(name="userId_1")
+	private User user1;
+
+	@ManyToOne
+	@JoinColumn(name="userID_2")
+	private User user2;
 	
 	public HasFriend(int userId1, int userId2)
 	{
