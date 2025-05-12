@@ -51,6 +51,15 @@ public class CommentLikeService {
         if (commentt == null) {
             throw new IllegalArgumentException("Comment with ID " + commentId + " not found");
         }
+        Post post = commentt.getcreatedPost();
+
+        // Remove the comment
+        post.getComments().remove(commentt);
+        em.remove(commentt);
+        em.flush(); // Ensure the deletion is committed to the database
+
+        // Refresh the Post to update its comments list
+        em.refresh(post); // This reloads the Post entity, updating the comments list
 
         em.remove(commentt);
     }
@@ -93,7 +102,13 @@ public class CommentLikeService {
         if (likes.isEmpty()) {
             throw new IllegalArgumentException("Like not found for post ID " + postId + " and user ID " + userId);
         }
-        em.remove(likes.get(0));
+        Like likeToDelete = likes.get(0);
+        Post post = likeToDelete.getPost();
+
+        post.getLikes().remove(likeToDelete);
+
+        em.remove(likeToDelete);
+        em.flush();
     }
 
     // Placeholder for notification (to be implemented in phase 2)

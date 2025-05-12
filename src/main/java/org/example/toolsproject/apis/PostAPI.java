@@ -2,7 +2,10 @@ package org.example.toolsproject.apis;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.toolsproject.models.Post.Comment;
@@ -21,13 +24,16 @@ import java.util.List;
 public class PostAPI {
     @Inject
     private PostEJB postEJB;
-
+    @Context
+    HttpServletRequest request;
     @POST
     @Path("create-post")
-    public String createPost(  PostDTO postDTO) {
+    public String createPost( @Context HttpServletRequest request, PostDTO postDTO) {
+        HttpSession session = request.getSession(false);
+        int userId = (Integer) session.getAttribute("userId");
         try {
 
-            Post post = postEJB.CreatePost( postDTO.getuserid(), postDTO.getContent(), postDTO.getImageUrl(), postDTO.getLinkUrl());
+            Post post = postEJB.CreatePost( userId, postDTO.getContent(), postDTO.getImageUrl(), postDTO.getLinkUrl());
             return "Post created";
         }
         catch (Exception e) {
@@ -51,7 +57,9 @@ public class PostAPI {
 
     @PUT
     @Path("{postId}")
-    public PostDTO updatePost(@PathParam("postId") int postId, @QueryParam("userId") int userId, PostDTO postDTO) {
+    public PostDTO updatePost(@Context HttpServletRequest request,@PathParam("postId") int postId, PostDTO postDTO) {
+        HttpSession session = request.getSession(false);
+        int userId = (Integer) session.getAttribute("userId");
 
         try {
             PostDTO updatedPost = postEJB.Update(postId, userId, postDTO.getContent(), postDTO.getImageUrl(), postDTO.getLinkUrl(), postDTO.getCommentCount(), postDTO.getLikeCount());
@@ -68,7 +76,9 @@ public class PostAPI {
 
     @DELETE
     @Path("{postId}")
-    public String updatePost(@PathParam("postId") int postId, @QueryParam("userId") int userId) {
+    public String updatePost(@Context HttpServletRequest request,@PathParam("postId") int postId) {
+        HttpSession session = request.getSession(false);
+        int userId = (Integer) session.getAttribute("userId");
 
         try {
             postEJB.deletePost(postId, userId);

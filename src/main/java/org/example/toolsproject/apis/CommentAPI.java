@@ -1,7 +1,10 @@
 package org.example.toolsproject.apis;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.toolsproject.ejbs.CommentLikeService;
@@ -17,14 +20,17 @@ import java.util.List;
 public class CommentAPI {
     @Inject
     private CommentLikeService commentLikeService;
-
+    @Context
+    HttpServletRequest request;
 
 
     @POST
     @Path("{postId}/comment")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public CommentDTO createComment(@PathParam("postId") int postId, @QueryParam("userId") int userId, CommentDTO commentDTO) {
+    public CommentDTO createComment(@Context HttpServletRequest request,@PathParam("postId") int postId, CommentDTO commentDTO) {
+        HttpSession session = request.getSession(false);
+        int userId = (Integer) session.getAttribute("userId");
 
         try {
             CommentDTO createdComment = commentLikeService.CreateAComment(postId, userId, commentDTO.getContent());
@@ -55,7 +61,9 @@ public class CommentAPI {
     @DELETE
     @Path("{postId}/comment/{commentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteComment(@PathParam("postId") int postId, @PathParam("commentId") int commentId, @QueryParam("userId") int userId) {
+    public void deleteComment(@Context HttpServletRequest request,@PathParam("postId") int postId, @PathParam("commentId") int commentId ) {
+        HttpSession session = request.getSession(false);
+        int userId = (Integer) session.getAttribute("userId");
 
         try {
             commentLikeService.DeleteAComment(postId, commentId, userId);

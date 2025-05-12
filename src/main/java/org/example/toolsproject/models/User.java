@@ -27,7 +27,8 @@ public class User {
     @NotNull
     @Column(unique = true)
     private String userPassword;
-
+    @Column(name = "user_type", insertable = false, updatable = false)
+    private String userType;
     @NotNull
     private String profileBio;
 
@@ -50,6 +51,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Post> post;
+
 
     public User(String fullName, String emailAddress, String userPassword, String profileBio) {
         this.fullName = fullName;

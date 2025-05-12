@@ -30,6 +30,9 @@ public class Post {
     @Column(name = "comment-count")
     private int commentCount;
 
+    @Column(name = "like_count")
+    private int likeCount;
+
     @Column(name = "created_time", nullable = false, updatable = false)
     private String createdTime;
 
@@ -54,8 +57,7 @@ public class Post {
         this.commentCount = commentcount;
     }
 
-    @Column(name = "like-count")
-    private int likeCount;
+
 
 
 
